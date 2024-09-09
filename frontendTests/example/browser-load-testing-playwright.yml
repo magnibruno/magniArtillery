@@ -1,0 +1,14 @@
+config:
+  target: "https://www.artillery.io"
+  phases:
+    - arrivalRate: 1
+      duration: 60
+      rampTo: 2
+      name: 'start up'
+  engines:
+    playwright: {}
+  processor: ./flows.js
+scenarios:
+  - name: "check_out_core_concepts_scenario"
+    engine: playwright
+    flowFunction: "checkOutArtilleryCoreConceptsFlow"

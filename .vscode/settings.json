@@ -1,0 +1,12 @@
+{
+  "yaml.schemas": {
+    "https://www.artillery.io/schema.json": [
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/asciiart-load-test.yml",
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/apiTests/asciiart-load-test.yml",
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/browser-load-testing-playwright.yml",
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/example/browser-load-testing-playwright.yml",
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/learning/loginScreenTest/browser-load-testing-playwright.yml",
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/learning/loginScreenTest/loginScreenTest.yml"
+    ]
+  }
+}

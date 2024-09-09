@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "artillery": "^2.0.20"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.0",
+    "@types/node": "^22.5.4"
+  },
+  "scripts": {}
+}
