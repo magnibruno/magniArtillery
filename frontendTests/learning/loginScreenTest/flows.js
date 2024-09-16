@@ -17,6 +17,10 @@ async function checkLearningLoginScreen(
 
   await test.step('Check if the page is well rendered', async () => {
     const isWelcomeTextVisible = await page.getByText('Welcome to MagniLearn').isVisible();
+    const text = await page.getByText('Welcome to MagniLearn').textContent();
+
+    console.log(text);
+    
 
     if (!isWelcomeTextVisible) {
       events.emit('counter', `user.element_check_failed.WelcomeToMagniLearn`, 1);

@@ -6,7 +6,10 @@
       "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/browser-load-testing-playwright.yml",
       "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/example/browser-load-testing-playwright.yml",
       "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/learning/loginScreenTest/browser-load-testing-playwright.yml",
-      "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/learning/loginScreenTest/loginScreenTest.yml"
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/learning/loginScreenTest/loginScreenTest.yml",
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/learning/loginScreenTest%20copy/loginScreenTest.yml",
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/learning/loadTest/loginScreenTest.yml",
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/learning/loadTest/loadTest.yml"
     ]
   }
 }

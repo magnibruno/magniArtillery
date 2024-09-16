@@ -1,13 +1,13 @@
 config:
-  target: "https://ie.learning.manilearn.com"
+  target: "https://localhost:44379/"
   phases:
     - arrivalRate: 1
-      duration: 1200
+      duration: 10
       name: 'start up'
   engines:
     playwright: {}
   processor: ./flows.js
 scenarios:
-  - name: "learning_login_screen"
+  - name: "load_test"
     engine: playwright
-    flowFunction: "checkLearningLoginScreen"
+    flowFunction: "loadTest"
