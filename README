@@ -1,7 +1,14 @@
 Follow the steps in a terminal
 
+# Install artillery:
+npm install -g artillery@latest
+
 # Clone the repository:
 git clone https://github.com/magnibruno/magniArtillery.git
+
+#Open the main folder MagniArtillery
+
+- run "npm install"
 
 # Open the folder frontendTests/learning/leadTest
 
