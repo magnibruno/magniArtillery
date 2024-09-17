@@ -1,1 +1,10 @@
 Magnilearn Artillery tests repo
+
+Follow the steps in a terminal
+
+# Clone the repository:
+git clone https://github.com/magnibruno/magniArtillery.git
+
+# Open the folder frontendTests/learning/leadTest
+
+# Run the command "artillery run loadTest.yml" in the terminal
