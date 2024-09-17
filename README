@@ -6,3 +6,10 @@ git clone https://github.com/magnibruno/magniArtillery.git
 # Open the folder frontendTests/learning/leadTest
 
 # Run the command "artillery run loadTest.yml" in the terminal
+
+This load test uses the same mechanism that we use with flood IO.
+Before each run, set the inUse flag in the table qa_load_test_users to 0. This will make the load test reuse users.
+
+
+
+
