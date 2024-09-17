@@ -7,8 +7,13 @@ git clone https://github.com/magnibruno/magniArtillery.git
 
 # Run the command "artillery run loadTest.yml" in the terminal
 
-This load test uses the same mechanism that we use with flood IO.
-Before each run, set the inUse flag in the table qa_load_test_users to 0. This will make the load test reuse users.
+- The current test will target perf.magnilearn.com environment.
+
+- You can check that the test is running by some screenshots saved on the frontendTests/learning/leadTest folder. Also l_lh table should be populated with exercises data.
+
+- I'm still working to understand errors, not all users achieve the exercise page for now.
+
+- This load test uses the same mechanism we use with flood IO. Before each run, set the inUse flag in the table qa_load_test_users to 0. This will make the load test reuse users.
 
 
 
