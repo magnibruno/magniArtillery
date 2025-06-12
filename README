@@ -25,3 +25,7 @@ git clone https://github.com/magnibruno/magniArtillery.git
 
 
 
+# RUN load test using AWS Fargate
+artillery run-fargate --region eu-west-1 frontendTests/learning/loadTest/loadTest.yml
+
+to run on AWS it will require to config the user.
