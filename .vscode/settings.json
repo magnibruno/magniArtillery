@@ -9,7 +9,11 @@
       "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/learning/loginScreenTest/loginScreenTest.yml",
       "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/learning/loginScreenTest%20copy/loginScreenTest.yml",
       "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/learning/loadTest/loginScreenTest.yml",
-      "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/learning/loadTest/loadTest.yml"
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/learning/loadTest/loadTest.yml",
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/frontendTests/guidedLearninContent/loadTest.yml",
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/tests/loadTest.yml",
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/tests/guidedLearning/loadTest.yml",
+      "file:///a%3A/Projetos/Magnilearn/magniArtillery/tests/guidedLearning/test.yml"
     ]
   }
 }

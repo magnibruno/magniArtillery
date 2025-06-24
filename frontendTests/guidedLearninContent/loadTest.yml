@@ -1,0 +1,13 @@
+config:
+  target: "https://localhost:44379/"
+  phases:
+    - arrivalRate: 2
+      duration: 10
+      name: 'start up'
+  engines:
+    playwright: {}
+  processor: ./flows.js
+scenarios:
+  - name: "load_test"
+    engine: playwright
+    flowFunction: "loadTest"
