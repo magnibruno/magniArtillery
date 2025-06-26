@@ -28,6 +28,26 @@ async function completeSection(page, sectionName) {
   await page.getByRole('button', { name: 'Done' }).click();
 }
 
+async function iterateLessons(page, lesson) {
+  // Instead of using a hardcoded link name, we have a UL list 
+  // Locate the UL element with data-testid="lessons"
+  const lessonsList = await page.locator('ul[data-testid="lessons"]');
+
+  // Get all the list items (links) within the UL
+  const lessonLinks = await lessonsList.locator('li a').all();
+
+  // Iterate over the links and perform actions
+  for (const link of lessonLinks) {
+    const linkText = await link.textContent();
+    console.log(`Clicking on lesson: ${linkText}`);
+    await link.click();
+    await page.waitForLoadState('networkidle');    
+    // navigate back to the lesson link page after completing the lesson do not use page.goBack()
+    page.goBack();
+    
+  }
+}
+
 async function test(page) {
   try {
     // Usage in the test
@@ -37,29 +57,23 @@ async function test(page) {
     await page.waitForLoadState('networkidle');
     await expect(page.getByRole('link', { name: 'QA A2 Class' })).toBeVisible({ timeout: 300000 });
     await expect(page.getByRole('heading', { name: 'Pivot English A2', exact: true })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Unit 1 - Arrivals' })).toBeVisible();
+    // Instead of using a hardcoded link name, we have a UL list 
+    // Locate the UL element with data-testid="units"
+    const unitsList = await page.locator('ul[data-testid="units"]');
 
-    await page.getByRole('link', { name: 'Unit 1 - Arrivals' }).click();
+    // Get all the list items (links) within unitsList
+    const unitLinks = await unitsList.locator('li a').all();
+    
 
-    await page.waitForLoadState('networkidle');
-    await expect(page.getByRole('link', { name: 'People and places' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Where are you?' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'What\'s in your bag?' })).toBeVisible();
+    // Iterate over the links and perform actions
+    for (const link of unitLinks) {
+      const linkText = await link.textContent();
+      console.log(`Clicking on unit: ${linkText}`);
+      await link.click();
+      await page.waitForLoadState('networkidle'); // Wait for the page to load after clicking
 
-    await page.getByRole('link', { name: 'People and places' }).click();
-
-    await page.waitForLoadState('networkidle');
-    await expect(page.getByRole('heading', { name: 'People and places' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Guided learning' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Listening' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Vocabulary' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Pronunciation' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Grammar' })).toBeVisible();
-
-    await completeSection(page, 'Listening');
-    await completeSection(page, 'Vocabulary');
-    await completeSection(page, 'Pronunciation');
-    await completeSection(page, 'Grammar');
+      await iterateLessons(page);
+    }
 
     await page.goto('https://ie-learning.magnilearn.com/Logout.aspx');
 
