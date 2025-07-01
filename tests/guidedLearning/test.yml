@@ -1,5 +1,5 @@
 config:
-  target: "https://localhost:44379/"
+  target: "https://ie-learning.magnilearn.com"
   phases:
     - arrivalRate: 2
       duration: 10
@@ -8,6 +8,6 @@ config:
     playwright: {}
   processor: ./flows.js
 scenarios:
-  - name: "load_test"
+  - name: "Guided Learning Flow Test"
     engine: playwright
     flowFunction: "test"
