@@ -18,5 +18,7 @@ export const testConfig = {
   }
 };
 
-// Debug: Log the password being used (remove this in production)
-console.log('Password being used:', testConfig.credentials.password); 
+// Debug: Log the password being used (only in development)
+if (process.env.NODE_ENV !== 'production') {
+  console.log('Password being used:', testConfig.credentials.password);
+} 
