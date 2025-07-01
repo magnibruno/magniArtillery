@@ -1,19 +1,27 @@
 {
   "dependencies": {
-    "artillery": "^2.0.20"
+    "artillery": "^2.0.20",
+    "dotenv": "^16.6.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.53.1",
     "@types/node": "^22.5.4",
+    "cross-env": "^7.0.3",
     "playwright": "^1.53.1",
     "typescript": "^5.8.3"
   },
   "scripts": {
     "test": "playwright test",
     "test:chrome": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
     "test:debug": "playwright test --project=chromium --headed --debug",
     "test:headed": "playwright test --project=chromium --headed",
     "test:ui": "playwright test --ui",
-    "test:report": "playwright show-report"
+    "test:report": "playwright show-report",
+    "test:guided-learning": "playwright test tests/guidedLearning/",
+    "test:with-env": "dotenv -e .env playwright test",
+    "test:perf": "npx cross-env BASE_URL=https://perf.magnilearn.com playwright test",
+    "test:dev": "npx cross-env BASE_URL=https://ie-learning.magnilearn.com playwright test"    
   }
 }

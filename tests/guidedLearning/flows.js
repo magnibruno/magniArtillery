@@ -1,12 +1,34 @@
 const { expect } = require('@playwright/test');
+const dotenv = require('dotenv');
+const path = require('path');
+
+// Load environment variables from .env file
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+
+// Configuration
+const testConfig = {
+  baseUrl: process.env.BASE_URL || 'https://ie-learning.magnilearn.com',
+  credentials: {
+    username: process.env.MAGNILEARN_USERNAME || 'MM_c4437318-9019-4d89-8899-182b8110b731',
+    password: process.env.MAGNILEARN_PASSWORD || '@C3T1nt3Gr4t10nPa$$w0rD'
+  },
+  timeouts: {
+    default: 300000, // 5 minutes
+    short: 10000,    // 10 seconds
+    medium: 30000    // 30 seconds
+  }
+};
 
 // Helper function for login
 async function login(page, username, password) {
-  await page.goto('https://ie-learning.magnilearn.com/Logout.aspx');
+  const loginUsername = username || testConfig.credentials.username;
+  const loginPassword = password || testConfig.credentials.password;
+  
+  await page.goto(`${testConfig.baseUrl}/Logout.aspx`);
   await page.getByRole('textbox', { name: 'Username (email)' }).click();
-  await page.getByRole('textbox', { name: 'Username (email)' }).fill(username);
+  await page.getByRole('textbox', { name: 'Username (email)' }).fill(loginUsername);
   await page.getByRole('textbox', { name: 'Password' }).click();
-  await page.getByRole('textbox', { name: 'Password' }).fill(password);
+  await page.getByRole('textbox', { name: 'Password' }).fill(loginPassword);
   await page.getByRole('button', { name: 'Login' }).click();
 
   await page.waitForLoadState('networkidle');
@@ -21,10 +43,10 @@ async function login(page, username, password) {
 }
 
 async function completeSection(page, sectionName) {
-  await expect(page.getByRole('button', { name: sectionName })).toBeVisible({ timeout: 300000 });
+  await expect(page.getByRole('button', { name: sectionName })).toBeVisible({ timeout: testConfig.timeouts.default });
   await page.getByRole('button', { name: sectionName }).click();
   await page.waitForLoadState('networkidle');
-  await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: 300000 });
+  await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: testConfig.timeouts.default });
   await page.getByRole('button', { name: 'Done' }).click();
 }
 
@@ -94,8 +116,8 @@ async function iterateLessons(page, lesson) {
 
 async function test(page) {
   try {
-    // Usage in the test
-    await login(page, 'MM_c4437318-9019-4d89-8899-182b8110b731', '@C3T1nt3Gr4t10nPa$$w0rD');
+    // Usage in the test - now using configuration
+    await login(page);
     
     // we need to wait for the page to load after login before continuing
     await page.waitForLoadState('networkidle');
@@ -188,7 +210,7 @@ async function test(page) {
       }
     }
 
-    await page.goto('https://ie-learning.magnilearn.com/Logout.aspx');
+    await page.goto(`${testConfig.baseUrl}/Logout.aspx`);
 
   } catch (error) {
     console.error('An error occurred during the test:', error);
