@@ -2,6 +2,43 @@
 
 This project contains automated tests for the MagniLearn platform using Playwright and Artillery.
 
+## Getting Started
+
+### Prerequisites
+
+- Node.js (version 18 or higher)
+- npm or yarn
+- Git
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd magniArtillery
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Install Playwright browsers**
+   ```bash
+   npx playwright install
+   ```
+
+4. **Set up environment variables**
+   ```bash
+   # Copy the example configuration
+   cp config.example .env
+   
+   # Edit .env with your credentials
+   # BASE_URL=https://ie-learning.magnilearn.com
+   # MAGNILEARN_USERNAME=your_username_here
+   # MAGNILEARN_PASSWORD=your_password_here
+   ```
+
 ## Configuration
 
 The tests are now parametrized to use environment variables for credentials and base URL. This makes it easy to run tests against different environments without modifying the code.
