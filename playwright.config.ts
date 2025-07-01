@@ -23,6 +23,8 @@ export default defineConfig({
   workers: process.env.CI ? 1 : 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
+  /* Global timeout for tests */
+  timeout: 300000, // 5 minutes
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -33,6 +35,15 @@ export default defineConfig({
     
     /* Enable debugging - headless in CI, headed locally */
     headless: process.env.CI ? true : false,
+
+    /* Timeout settings */
+    actionTimeout: 300000, // 5 minutes for actions like click, fill
+    navigationTimeout: 300000, // 5 minutes for navigation
+  },
+
+  /* Global expect timeout settings */
+  expect: {
+    timeout: 300000, // 5 minutes for expect assertions
   },
 
   /* Configure projects for major browsers */
