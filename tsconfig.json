@@ -8,5 +8,6 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "./js-tests",
     "rootDir": "./tests"
-  }
+  },
+  "include": ["tests/**/*"]
 }

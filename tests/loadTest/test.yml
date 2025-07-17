@@ -1,0 +1,13 @@
+config:
+  target: "https://ie-learning.magnilearn.com"
+  phases:
+    - arrivalRate: 10
+      duration: 30
+      name: 'start up'
+  engines:
+    playwright: {}
+  processor: ./flows.js
+scenarios:
+  - name: "Load Test"
+    engine: playwright
+    flowFunction: "test"
