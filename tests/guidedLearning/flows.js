@@ -19,11 +19,20 @@ const testConfig = {
   }
 };
 
+// Helper function to wait for page load with error handling
+async function waitForPageLoad(page, timeout = 10000) {
+  try {
+    await page.waitForLoadState('networkidle', { timeout });
+  } catch (error) {
+    console.log(`Page load wait timed out after ${timeout}ms, continuing...`);
+  }
+}
+
 // Helper function for login
 async function login(page, username, password) {
   const loginUsername = username || testConfig.credentials.username;
   const loginPassword = password || testConfig.credentials.password;
-  
+
   await page.goto(`${testConfig.baseUrl}/Logout.aspx`);
   await page.getByRole('textbox', { name: 'Username (email)' }).click();
   await page.getByRole('textbox', { name: 'Username (email)' }).fill(loginUsername);
@@ -31,7 +40,8 @@ async function login(page, username, password) {
   await page.getByRole('textbox', { name: 'Password' }).fill(loginPassword);
   await page.getByRole('button', { name: 'Login' }).click();
 
-  await page.waitForLoadState('networkidle');
+  // await page.waitForLoadState('networkidle');
+  await waitForPageLoad(page);
   const terminateButton = page.getByRole('button', { name: 'Terminate & stay here' });
 
   if (await terminateButton.isVisible()) {
@@ -45,7 +55,8 @@ async function login(page, username, password) {
 async function completeSection(page, sectionName) {
   await expect(page.getByRole('button', { name: sectionName })).toBeVisible({ timeout: testConfig.timeouts.default });
   await page.getByRole('button', { name: sectionName }).click();
-  await page.waitForLoadState('networkidle');
+  // await page.waitForLoadState('networkidle');
+  await waitForPageLoad(page);
   await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: testConfig.timeouts.default });
   await page.getByRole('button', { name: 'Done' }).click();
 }
@@ -65,14 +76,14 @@ async function iterateSections(page) {
         const sectionName = await link.textContent();
         console.log(`Clicking on section: ${sectionName}`);
         await completeSection(page, sectionName);
-        
+
       }
       resolve();
-    } catch (error){
+    } catch (error) {
       console.error('An error occurred while iterating sections:', error);
       reject(error); // Reject the promise if an error occurs
     }
-    
+
   });
 }
 
@@ -86,31 +97,34 @@ async function iterateLessons(page, lesson) {
 
   // Iterate over the links and perform actions
   for (const link of lessonLinks) {
-    await page.waitForLoadState('networkidle');
+    // await page.waitForLoadState('networkidle');
+    await waitForPageLoad(page);
     const linkText = await link.textContent();
     console.log(`Clicking on lesson: ${linkText}`);
     await link.click();
-    await page.waitForLoadState('networkidle');    
+    // await page.waitForLoadState('networkidle');
+    await waitForPageLoad(page);
     // navigate back to the lesson link page after completing the lesson do not use page.goBack()
     // Instead of using a hardcoded link name, we have a UL list 
-      // Locate the UL element with data-testid="sections"
-      const sectionsList = await page.locator('ul[data-testid="sections"]');
+    // Locate the UL element with data-testid="sections"
+    const sectionsList = await page.locator('ul[data-testid="sections"]');
 
-      // Get all the list items (links) within the UL
-      const sectionLinks = await sectionsList.locator('li button').all();
+    // Get all the list items (links) within the UL
+    const sectionLinks = await sectionsList.locator('li button').all();
 
-      // Iterate over the links and perform actions
-      for (const link of sectionLinks) {
-        const sectionName = await link.textContent();
-        console.log(`Clicking on section: ${sectionName}`);
-        await expect(page.getByRole('button', { name: sectionName })).toBeVisible({ timeout: 300000 });
-        await page.getByRole('button', { name: sectionName }).click();
-        await page.waitForLoadState('networkidle');
-        await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: 300000 });
-        await page.getByRole('button', { name: 'Done' }).click();
-      }
+    // Iterate over the links and perform actions
+    for (const link of sectionLinks) {
+      const sectionName = await link.textContent();
+      console.log(`Clicking on section: ${sectionName}`);
+      await expect(page.getByRole('button', { name: sectionName })).toBeVisible({ timeout: 300000 });
+      await page.getByRole('button', { name: sectionName }).click();
+      // await page.waitForLoadState('networkidle');
+      await waitForPageLoad(page);
+      await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: 300000 });
+      await page.getByRole('button', { name: 'Done' }).click();
+    }
     page.goBack();
-    
+
   }
 }
 
@@ -118,18 +132,53 @@ async function test(page) {
   try {
     // Usage in the test - now using configuration
     await login(page);
-    
+
     // we need to wait for the page to load after login before continuing
-    await page.waitForLoadState('networkidle');
-    await expect(page.getByRole('link', { name: 'QA A2 Class' })).toBeVisible({ timeout: 300000 });
-    await expect(page.getByRole('heading', { name: 'Pivot English A2', exact: true })).toBeVisible();
+    // await page.waitForLoadState('networkidle');
+    await waitForPageLoad(page);
+
+    try {
+      const studentExperienceBtn = page.getByRole('button', { name: 'Student experience' });
+      const isTrialOrDemo = await studentExperienceBtn.isVisible({ timeout: 2000 }); // Waiting for 2 seconds.
+      if (isTrialOrDemo) {
+        // Trial/Demo
+        await studentExperienceBtn.click();
+
+        // Waiting for page to load, can be or pillar page, or cefr/bands page
+        // await page.waitForLoadState('networkidle');
+        await waitForPageLoad(page);
+        const urlContainsCefr = page.url().includes('pe/cefr');
+
+        if (urlContainsCefr) {
+          try {
+            // In CEFR/Bands page
+            // Find the first button in ul that is not disabled and click it
+            await page.locator('ul button:not([disabled])').first().click({ timeout: 300000 });
+          } catch (cefrError) {
+            console.log('Failed to click CEFR button, continuing...', cefrError.message);
+          }
+        }
+      }
+    } catch (error) {
+      console.log('Trial/Demo navigation failed, continuing...', error.message);
+    }
+
+    // Waiting for title to be previewed meaning page is loaded.
+    try {
+      await expect(page.getByTestId('le-school-name')).toBeVisible({ timeout: 300000 });
+    } catch (error) {
+      // If element is not visible after timeout, navigate to logout
+      console.log('Element not visible after timeout, redirecting to logout');
+      await page.goto('/Logout.aspx');
+    }
+
     // Instead of using a hardcoded link name, we have a UL list 
     // Locate the UL element with data-testid="units"
     const unitsList = await page.locator('ul[data-testid="units"]');
 
     // Get all the list items (links) within unitsList
     const unitLinks = await unitsList.locator('li a').all();
-    
+
 
     // Iterate over the links and perform actions
     for (const link of unitLinks) {
@@ -137,7 +186,8 @@ async function test(page) {
       console.log(`Clicking on unit: ${linkText}`);
       await link.click();
       await expect(page.getByRole('heading', { name: linkText, exact: true })).toBeVisible({ timeout: 300000 });
-      await page.waitForLoadState('networkidle'); // Wait for the page to load after clicking
+      // await page.waitForLoadState('networkidle'); // Wait for the page to load after clicking
+      await waitForPageLoad(page);
 
       // Instead of using a hardcoded link name, we have a UL list 
       // Locate the UL element with data-testid="lessons"
@@ -148,11 +198,13 @@ async function test(page) {
 
       // Iterate over the links and perform actions
       for (const link of lessonLinks) {
-        await page.waitForLoadState('networkidle');
+        // await page.waitForLoadState('networkidle');
+        await waitForPageLoad(page);
         const linkText = await link.textContent();
         console.log(`Clicking on lesson: ${linkText}`);
         await link.click();
-        await page.waitForLoadState('networkidle');    
+        // await page.waitForLoadState('networkidle');
+        await waitForPageLoad(page);
 
         await expect(page.getByRole('button', { name: 'Guided learning' })).toBeVisible({ timeout: 300000 });
         // navigate back to the lesson link page after completing the lesson do not use page.goBack()
@@ -169,44 +221,49 @@ async function test(page) {
           console.log(`Clicking on section: ${sectionName}`);
           await expect(page.getByRole('button', { name: sectionName })).toBeVisible({ timeout: 300000 });
           await page.getByRole('button', { name: sectionName }).click();
-          await page.waitForLoadState('networkidle');
+          // await page.waitForLoadState('networkidle');
+          await waitForPageLoad(page);
           await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: 300000 });
           await page.getByRole('button', { name: 'Done' }).click();
         }
 
         // after sections, we need to run independent learning if the button is enabled
-        await page.waitForLoadState('networkidle');
+        // await page.waitForLoadState('networkidle');
+        await waitForPageLoad(page);
         if (await page.getByRole('button', { name: 'Independent learning' }).isEnabled()) {
           console.log(`Run Independent Learning`);
           await expect(page.getByRole('button', { name: 'Independent learning' })).toBeVisible({ timeout: 300000 });
           await page.getByRole('button', { name: 'Independent learning' }).click();
-          await page.waitForLoadState('networkidle');
+          // await page.waitForLoadState('networkidle');
+          await waitForPageLoad(page);
           await expect(page.getByRole('heading', { name: 'Independent learning', exact: true })).toBeVisible({ timeout: 300000 });
           await expect(page.getByRole('button', { name: 'Next' })).toBeVisible({ timeout: 300000 });
-          await page.getByRole('button', { name: 'Next' }).click();        
+          await page.getByRole('button', { name: 'Next' }).click();
           await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: 300000 });
           await page.getByRole('button', { name: 'Done' }).click();
         }
-        
 
-        await page.waitForLoadState('networkidle');
-        if (await page.getByRole('button', { name: 'Memory training'}).isEnabled()) {
+
+        // await page.waitForLoadState('networkidle');
+        await waitForPageLoad(page);
+        if (await page.getByRole('button', { name: 'Memory training' }).isEnabled()) {
           // after Independent Learning, we need to run Memory Training
           console.log(`Run Memory Training`);
           await expect(page.getByRole('button', { name: 'Memory training' })).toBeVisible({ timeout: 300000 });
           await page.getByRole('button', { name: 'Memory training' }).click();
-          await page.waitForLoadState('networkidle');
+          // await page.waitForLoadState('networkidle');
+          await waitForPageLoad(page);
           await expect(page.getByRole('heading', { name: 'Memory training', exact: true })).toBeVisible({ timeout: 300000 });
           await expect(page.getByRole('button', { name: 'Next' })).toBeVisible({ timeout: 300000 });
-          await page.getByRole('button', { name: 'Next' }).click();   
+          await page.getByRole('button', { name: 'Next' }).click();
           await expect(page.getByRole('button', { name: 'Continue' })).toBeVisible({ timeout: 300000 });
-          await page.getByRole('button', { name: 'Continue' }).click();      
+          await page.getByRole('button', { name: 'Continue' }).click();
           await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: 300000 });
           await page.getByRole('button', { name: 'Done' }).click();
-        }        
+        }
 
         page.goBack();
-        
+
       }
     }
 

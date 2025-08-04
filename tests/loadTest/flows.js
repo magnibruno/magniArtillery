@@ -19,6 +19,15 @@ const testConfig = {
   }
 };
 
+// Helper function to wait for page load with error handling
+async function waitForPageLoad(page, timeout = 10000) {
+  try {
+    await page.waitForLoadState('networkidle', { timeout });
+  } catch (error) {
+    console.log(`Page load wait timed out after ${timeout}ms, continuing...`);
+  }
+}
+
 // Helper function for login
 async function login(page, username, password) {
   // get username and password
@@ -40,7 +49,8 @@ async function login(page, username, password) {
   await page.getByRole('textbox', { name: 'Password' }).fill(loginPassword);
   await page.getByRole('button', { name: 'Login' }).click();
 
-  await page.waitForLoadState('networkidle');
+  // await page.waitForLoadState('networkidle');
+  await waitForPageLoad(page);
   const terminateButton = page.getByRole('button', { name: 'Terminate & stay here' });
 
   if (await terminateButton.isVisible()) {
@@ -57,12 +67,14 @@ async function test(page) {
     await login(page);
     
     // we need to wait for the page to load after login before continuing
-    await page.waitForLoadState('networkidle');
+    // await page.waitForLoadState('networkidle');
+    await waitForPageLoad(page);
 
     await expect(page.getByRole('navigation').getByRole('button', { name: 'Start lesson' })).toBeVisible({ timeout: 150000});
     await page.getByRole('navigation').getByRole('button', { name: 'Start lesson' }).click();
 
-    await page.waitForLoadState('networkidle');
+    // await page.waitForLoadState('networkidle');
+    await waitForPageLoad(page);
 
     await expect(page.getByRole('button', { name: 'Return to the dashboard' })).toBeVisible({ timeout: 700000 });
     await page.getByRole('button', { name: 'Return to the dashboard' }).click();       
