@@ -1,8 +1,8 @@
 config:
   target: "https://ie-learning.magnilearn.com"
   phases:
-    - arrivalRate: 2
-      duration: 10
+    - arrivalRate: 1
+      duration: 1
       name: 'start up'
   engines:
     playwright: {}

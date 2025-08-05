@@ -1,0 +1,7 @@
+fargate:
+  cluster: your-cluster-name
+  taskDefinition: artillery-task-name
+  region: us-east-1
+  launchType: FARGATE
+  assignPublicIp: true
+  count: 10  # ← This means 10 tasks will be launched

@@ -31,6 +31,11 @@ async function waitForPageLoad(page, timeout = 10000) {
 // Helper function for login
 async function login(page, username, password) {
   // get username and password
+  
+  // Add random delay to prevent race conditions when multiple users hit the endpoint simultaneously
+  const randomDelay = Math.floor(Math.random() * 3000) + 1000; // 1-4 seconds
+  await page.waitForTimeout(randomDelay);
+
   await page.goto(`${testConfig.baseUrl}/api/LoadTest/getUser`);
 
   //read body content and parse it as json
