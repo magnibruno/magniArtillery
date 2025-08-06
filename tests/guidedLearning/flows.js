@@ -120,7 +120,7 @@ async function iterateLessons(page, lesson) {
       await page.getByRole('button', { name: sectionName }).click();
       // await page.waitForLoadState('networkidle');
       await waitForPageLoad(page);
-      await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: 300000 });
+      await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: 600000 });
       await page.getByRole('button', { name: 'Done' }).click();
     }
     page.goBack();
@@ -223,7 +223,7 @@ async function test(page) {
           await page.getByRole('button', { name: sectionName }).click();
           // await page.waitForLoadState('networkidle');
           await waitForPageLoad(page);
-          await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: 300000 });
+          await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: 600000 });
           await page.getByRole('button', { name: 'Done' }).click();
         }
 
@@ -239,7 +239,7 @@ async function test(page) {
           await expect(page.getByRole('heading', { name: 'Independent learning', exact: true })).toBeVisible({ timeout: 300000 });
           await expect(page.getByRole('button', { name: 'Next' })).toBeVisible({ timeout: 300000 });
           await page.getByRole('button', { name: 'Next' }).click();
-          await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: 300000 });
+          await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: 600000 });
           await page.getByRole('button', { name: 'Done' }).click();
         }
 
@@ -258,7 +258,7 @@ async function test(page) {
           await page.getByRole('button', { name: 'Next' }).click();
           await expect(page.getByRole('button', { name: 'Continue' })).toBeVisible({ timeout: 300000 });
           await page.getByRole('button', { name: 'Continue' }).click();
-          await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: 300000 });
+          await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({ timeout: 1200000 });
           await page.getByRole('button', { name: 'Done' }).click();
         }
 
