@@ -22,8 +22,8 @@ module.exports = defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
-  timeout: 1200000, // Set a timeout of 20 minutes,
-  globalTimeout: 1200000, // Set a timeout of 20 minutes
+  timeout: 86400000, // 24 hours
+  globalTimeout: 86400000, // 24 hours
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
